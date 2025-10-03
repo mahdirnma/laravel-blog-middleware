@@ -54,7 +54,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $categories=Category::where('is_active',1)->get();
+        $tags=Tag::where('is_active',1)->get();
+        return view('admin.posts.edit',compact('post','categories','tags'));
     }
 
     /**
@@ -62,7 +64,11 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        $status=$post->update($request->all());
+        if($status){
+            return redirect()->route('posts.index');
+        }
+        return redirect()->back();
     }
 
     /**
