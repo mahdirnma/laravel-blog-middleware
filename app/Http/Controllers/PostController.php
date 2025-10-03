@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -22,7 +24,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $categories=Category::where('is_active',1)->get();
+        $tags=Tag::where('is_active',1)->get();
+        return view('admin.posts.create',compact('categories','tags'));
     }
 
     /**
@@ -30,7 +34,11 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        $post=Post::create($request->all());
+        if($post){
+            return redirect()->route('posts.index')/*->with('success','Post created successfully')*/;
+        }
+        return redirect()->back();
     }
 
     /**
